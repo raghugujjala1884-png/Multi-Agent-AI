@@ -1,0 +1,26 @@
+
+services:
+  multi-agent:
+    build: .
+    container_name: multi-agent-ai
+
+    environment:
+      OLLAMA_HOST: http://host.docker.internal:11434
+
+    volumes:
+      - ./RAG/docs:/app/RAG/docs:ro
+      - chroma_data:/app/RAG/vector_store
+      - sqlite_data:/app/database
+
+    stdin_open: true
+    tty: true
+
+    command:
+      - python
+      - -u
+      - -m
+      - multi_agent.multi_agent
+
+volumes:
+  chroma_data:
+  sqlite_data:

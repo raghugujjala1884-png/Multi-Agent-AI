@@ -1,0 +1,14 @@
+# Direct dependencies for the primary Multi-Agent AI application
+# Versions reflect the inspected local environment.
+chromadb==1.5.9
+httpx==0.28.1
+langchain-core==1.5.3
+langchain-mcp-adapters==0.3.2
+langchain-ollama==1.1.0
+langchain-text-splitters==1.1.3
+langgraph==1.2.10
+mcp==1.29.1
+ollama==0.6.2
+pydantic==2.13.4
+pypdf==6.16.2
+rank-bm25==0.2.2

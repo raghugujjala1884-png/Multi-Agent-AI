@@ -1,0 +1,72 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Editor / operating system
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# Local model files (keep Python source under models/)
+models/*.gguf
+models/*.bin
+models/*.safetensors
+hf_cache/
+.cache/
+
+# Generated Chroma persistence data (keep Python helper scripts)
+RAG/vector_store/chroma.sqlite3
+RAG/vector_store/*/
+!RAG/vector_store/__init__.py
+
+# Local/private data - review before publishing
+database/*.db
+database/*.sqlite
+documents/Resume.pdf
+documents/employees.csv
+
+# Local environment snapshots / inspection output
+installed_packages.txt
+project_imports.txt
+
+# Private and sample documents
+documents/company_policy.txt
+documents/Resume.pdf
+documents/employees.csv
+documents/Model_Context_Protocol.pdf
+
+# RAG source PDFs - pending redistribution permission
+RAG/docs/*.pdf
+
+# Generated database files
+database/*.db
+database/*.sqlite
+database/*.db-journal
+database/*.db-wal
+database/*.db-shm
+
+# Generated Chroma data
+RAG/vector_store/chroma.sqlite3
+RAG/vector_store/*/
+!RAG/vector_store/__init__.py
