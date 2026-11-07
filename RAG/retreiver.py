@@ -12,59 +12,133 @@ COLLECTION_NAME = "climate_knowledge"
 TOP_K = 5
 
 
+# # ============================================================
+# # 1. Load documents for BM25
+# # ============================================================
+
+# print("Loading documents for BM25...")
+
+# documents = load_pdfs()
+# chunks = split_documents(documents)
+
+# print(f"Total chunks loaded: {len(chunks)}")
+
+
+# # ============================================================
+# # 2. Prepare BM25
+# # ============================================================
+
+# print("\nBuilding BM25 index...")
+
+# corpus = [
+#     chunk.page_content
+#     for chunk in chunks
+# ]
+
+# tokenized_corpus = [
+#     document.lower().split()
+#     for document in corpus
+# ]
+
+# bm25 = BM25Okapi(tokenized_corpus)
+
+# print("BM25 index ready.")
+
+
+# # ============================================================
+# # 3. Load embedding model
+# # ============================================================
+
+# embeddings = OllamaEmbeddings(
+#     model="nomic-embed-text"
+# )
+
+
+# # ============================================================
+# # 4. Connect to Chroma
+# # ============================================================
+
+# client = chromadb.PersistentClient(
+#     path=VECTOR_STORE_DIR
+# )
+
+# collection = client.get_collection(
+#     name=COLLECTION_NAME
+# )
+
 # ============================================================
-# 1. Load documents for BM25
+# 1. RETRIEVER STATE
 # ============================================================
 
-print("Loading documents for BM25...")
+# These variables will be initialized only when retrieval is needed.
 
-documents = load_pdfs()
-chunks = split_documents(documents)
-
-print(f"Total chunks loaded: {len(chunks)}")
-
-
-# ============================================================
-# 2. Prepare BM25
-# ============================================================
-
-print("\nBuilding BM25 index...")
-
-corpus = [
-    chunk.page_content
-    for chunk in chunks
-]
-
-tokenized_corpus = [
-    document.lower().split()
-    for document in corpus
-]
-
-bm25 = BM25Okapi(tokenized_corpus)
-
-print("BM25 index ready.")
+chunks = None
+bm25 = None
+embeddings = None
+collection = None
 
 
 # ============================================================
-# 3. Load embedding model
+# 2. LAZY INITIALIZATION
 # ============================================================
 
-embeddings = OllamaEmbeddings(
-    model="nomic-embed-text"
-)
+def _initialize_retriever():
 
+    global chunks, bm25, embeddings, collection
 
-# ============================================================
-# 4. Connect to Chroma
-# ============================================================
+    # Avoid initializing resources more than once.
+    if bm25 is not None:
+        return
 
-client = chromadb.PersistentClient(
-    path=VECTOR_STORE_DIR
-)
+    print("Initializing RAG retriever...")
 
-collection = client.get_collection(
-    name=COLLECTION_NAME
-)
+    # Load and split PDF documents.
+    documents = load_pdfs()
+    loaded_chunks = split_documents(documents)
+
+    if not loaded_chunks:
+        raise FileNotFoundError(
+            "No document chunks found. "
+            "Check the PDF files in rag/docs."
+        )
+
+    # Build BM25 index.
+    corpus = [
+        chunk.page_content
+        for chunk in loaded_chunks
+    ]
+
+    tokenized_corpus = [
+        document.lower().split()
+        for document in corpus
+    ]
+
+    loaded_bm25 = BM25Okapi(tokenized_corpus)
+
+    # Initialize embedding model.
+    loaded_embeddings = OllamaEmbeddings(
+        model="nomic-embed-text"
+    )
+
+    # Connect to ChromaDB.
+    client = chromadb.PersistentClient(
+        path=VECTOR_STORE_DIR
+    )
+
+    loaded_collection = client.get_collection(
+        name=COLLECTION_NAME
+    )
+
+    # Assign resources after successful initialization.
+    chunks = loaded_chunks
+    bm25 = loaded_bm25
+    embeddings = loaded_embeddings
+    collection = loaded_collection
+
+    print(f"Total chunks loaded: {len(chunks)}")
+    print("BM25 index ready.")
+    print("RAG retriever initialized successfully.")
+
 
 
 # ============================================================
@@ -72,6 +146,8 @@ collection = client.get_collection(
 # ============================================================
 
 def dense_search(question, top_k=TOP_K):
+
+    _initialize_retriever()
 
     query_embedding = embeddings.embed_query(question)
 
@@ -120,6 +196,8 @@ def dense_search(question, top_k=TOP_K):
 # ============================================================
 
 def sparse_search(question, top_k=TOP_K):
+
+    _initialize_retriever()
 
     tokenized_query = question.lower().split()
 

@@ -9,6 +9,7 @@ import traceback
 
 from langchain_ollama import ChatOllama
 from multi_agent.rag_agent import rag_agent as run_rag_agent
+from multi_agent.routing import route_agent
 from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.graph import StateGraph, MessagesState, START, END
 from langchain_mcp_adapters.client import MultiServerMCPClient
@@ -574,15 +575,15 @@ async def rag_agent_node(state: AgentState):
 # ROUTER
 # ============================================================
 
-def route_agent(
-    state: AgentState
-) -> Literal[
-    "employee_agent",
-    "weather_agent",
-    "rag_agent",
-    "FINISH"
-]:
-    return state["next_agent"]
+# def route_agent(
+#     state: AgentState
+# ) -> Literal[
+#     "employee_agent",
+#     "weather_agent",
+#     "rag_agent",
+#     "FINISH"
+# ]:
+#     return state["next_agent"]
 
 # ============================================================
 # BUILD GRAPH
