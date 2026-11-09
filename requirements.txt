@@ -12,3 +12,5 @@ ollama==0.6.2
 pydantic==2.13.4
 pypdf==6.16.2
 rank-bm25==0.2.2
+fastapi
+uvicorn

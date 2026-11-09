@@ -1,8 +1,10 @@
-
 services:
   multi-agent:
     build: .
     container_name: multi-agent-ai
+
+    ports:
+      - "8000:8000"
 
     environment:
       OLLAMA_HOST: http://host.docker.internal:11434
@@ -16,10 +18,12 @@ services:
     tty: true
 
     command:
-      - python
-      - -u
-      - -m
-      - multi_agent.multi_agent
+      - uvicorn
+      - api.main:app
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8000"
 
 volumes:
   chroma_data:

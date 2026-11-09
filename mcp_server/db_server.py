@@ -41,6 +41,39 @@ def get_employee(employee_id: str) -> dict:
         "salary": employee[4]
     }
 
+@mcp.tool()
+def get_all_employees() -> list[dict]:
+    """
+    Get all employees from the company database.
+    """
+
+    connection = sqlite3.connect("database/company.db")
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        SELECT employee_id, name, department, designation, salary
+        FROM employees
+        """
+    )
+
+    employees = cursor.fetchall()
+
+    connection.close()
+
+    result = []
+
+    for employee in employees:
+        result.append({
+            "employee_id": employee[0],
+            "name": employee[1],
+            "department": employee[2],
+            "designation": employee[3],
+            "salary": employee[4]
+        })
+
+    return result
+
 
 @mcp.tool()
 def get_employees_by_department(department: str) -> list[dict]:

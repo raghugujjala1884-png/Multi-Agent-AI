@@ -1,4 +1,3 @@
-
 FROM python:3.11-slim
 
 WORKDIR /app
@@ -13,8 +12,8 @@ COPY . .
 # Handle RAG/rag casing differences on Linux
 RUN ln -s /app/RAG /app/rag
 
-# Allow the container to communicate with Ollama on Windows
+# Connect container to Ollama running on Windows
 ENV OLLAMA_HOST=http://host.docker.internal:11434
 
-# Start the Multi-Agent application
-CMD ["python", "-m", "multi_agent.multi_agent"]
+# Start FastAPI using Uvicorn
+CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]

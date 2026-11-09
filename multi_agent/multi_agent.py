@@ -237,7 +237,8 @@ async def employee_agent(state: AgentState):
         if tool.name in [
             "get_employee",
             "get_employees_by_department",
-            "search_employee_by_name"
+            "search_employee_by_name",
+             "get_all_employees"
         ]
     ]
 
