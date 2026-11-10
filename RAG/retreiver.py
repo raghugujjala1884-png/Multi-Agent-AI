@@ -1,7 +1,8 @@
 import chromadb
 
 from rank_bm25 import BM25Okapi
-from langchain_ollama import OllamaEmbeddings
+# from langchain_ollama import OllamaEmbeddings
+from config.model_config import get_embedding_model
 
 from RAG.ingestion import load_pdfs, split_documents
 
@@ -116,9 +117,7 @@ def _initialize_retriever():
     loaded_bm25 = BM25Okapi(tokenized_corpus)
 
     # Initialize embedding model.
-    loaded_embeddings = OllamaEmbeddings(
-        model="nomic-embed-text"
-    )
+    loaded_embeddings = get_embedding_model()
 
     # Connect to ChromaDB.
     client = chromadb.PersistentClient(

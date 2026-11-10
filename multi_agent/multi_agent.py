@@ -7,7 +7,8 @@ import json
 import re
 import traceback
 
-from langchain_ollama import ChatOllama
+# from langchain_ollama import ChatOllama
+from config.model_config import get_chat_model
 from multi_agent.rag_agent import rag_agent as run_rag_agent
 from multi_agent.routing import route_agent
 from langchain_core.messages import HumanMessage, SystemMessage
@@ -19,12 +20,14 @@ from langchain_mcp_adapters.client import MultiServerMCPClient
 # MODEL
 # ============================================================
 
-llm = ChatOllama(
-    model="qwen3:4b",
-    temperature=0,
-    num_predict=1024,
-    reasoning=False
-)
+# llm = ChatOllama(
+#     model="qwen3:4b",
+#     temperature=0,
+#     num_predict=1024,
+#     reasoning=False
+# )
+
+llm = get_chat_model()
 
 
 # ============================================================

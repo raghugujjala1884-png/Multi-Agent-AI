@@ -1,5 +1,6 @@
 
-from langchain_ollama import ChatOllama
+# from langchain_ollama import ChatOllama
+from config.model_config import get_chat_model
 from pydantic import BaseModel
 from typing import Literal
 
@@ -32,12 +33,14 @@ MAX_ANSWER_ATTEMPTS = 2
 # INITIALIZE LLM
 # ============================================================
 
-llm = ChatOllama(
-    model=MODEL_NAME,
-    temperature=0,
-    num_predict=1024,
-    reasoning=False,
-)
+# llm = ChatOllama(
+#     model=MODEL_NAME,
+#     temperature=0,
+#     num_predict=1024,
+#     reasoning=False,
+# )
+
+llm = get_chat_model()
 
 
 # NEW: STRUCTURED REVIEWER

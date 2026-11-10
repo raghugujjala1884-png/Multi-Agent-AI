@@ -13,7 +13,7 @@ COPY . .
 RUN ln -s /app/RAG /app/rag
 
 # Connect container to Ollama running on Windows
-ENV OLLAMA_HOST=http://host.docker.internal:11434
+ENV OLLAMA_BASE_URL=http://host.docker.internal:11434
 
 # Start FastAPI using Uvicorn
 CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]

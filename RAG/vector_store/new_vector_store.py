@@ -1,7 +1,8 @@
 from pathlib import Path
 
 import chromadb
-from langchain_ollama import OllamaEmbeddings
+# from langchain_ollama import OllamaEmbeddings
+from config.model_config import get_embedding_model
 
 from RAG.ingestion import load_pdfs, split_documents
 
@@ -33,9 +34,7 @@ def main():
 
     print("\nLoading embedding model...")
 
-    embeddings = OllamaEmbeddings(
-        model="nomic-embed-text"
-    )
+    embeddings = get_embedding_model()
 
     # -----------------------------------------
     # 3. Create Chroma database
