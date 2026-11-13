@@ -2,13 +2,32 @@ import chromadb
 
 from rank_bm25 import BM25Okapi
 # from langchain_ollama import OllamaEmbeddings
-from config.model_config import get_embedding_model
+# from config.model_config import get_embedding_model
+from config.model_config import (
+    get_embedding_model,
+    EMBEDDING_PROVIDER
+)
 
 from RAG.ingestion import load_pdfs, split_documents
 
 
+# VECTOR_STORE_DIR = "RAG/vector_store"
+# COLLECTION_NAME = "climate_knowledge"
+
 VECTOR_STORE_DIR = "RAG/vector_store"
-COLLECTION_NAME = "climate_knowledge"
+
+COLLECTION_NAMES = {
+    "ollama": "climate_knowledge",
+    "gemini": "climate_knowledge_gemini"
+}
+
+COLLECTION_NAME = COLLECTION_NAMES.get(EMBEDDING_PROVIDER)
+
+if COLLECTION_NAME is None:
+    raise ValueError(
+        f"Unsupported embedding provider: {EMBEDDING_PROVIDER}"
+    )
+
 
 TOP_K = 5
 
@@ -120,13 +139,24 @@ def _initialize_retriever():
     loaded_embeddings = get_embedding_model()
 
     # Connect to ChromaDB.
+    # client = chromadb.PersistentClient(
+    #     path=VECTOR_STORE_DIR
+    # )
+
+    # loaded_collection = client.get_collection(
+    #     name=COLLECTION_NAME
+    # )
+
+    # Connect to ChromaDB.
     client = chromadb.PersistentClient(
         path=VECTOR_STORE_DIR
     )
 
-    loaded_collection = client.get_collection(
+    loaded_collection = client.get_or_create_collection(
         name=COLLECTION_NAME
     )
+
+    print(f"Using ChromaDB collection: {COLLECTION_NAME}")
 
     # Assign resources after successful initialization.
     chunks = loaded_chunks
