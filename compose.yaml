@@ -17,13 +17,13 @@ services:
     stdin_open: true
     tty: true
 
-    command:
-      - uvicorn
-      - api.main:app
-      - --host
-      - 0.0.0.0
-      - --port
-      - "8000"
+    # command:
+    #   - uvicorn
+    #   - api.main:app
+    #   - --host
+    #   - 0.0.0.0
+    #   - --port
+    #   - "8000"
 
 volumes:
   chroma_data:
