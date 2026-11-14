@@ -17,8 +17,8 @@ database/*.db
 database/*.sqlite
 database/*.db-*
 
-documents/
-RAG/docs/*.pdf
+# documents/
+# RAG/docs/*.pdf
 
 RAG/vector_store/chroma.sqlite3
 RAG/vector_store/*
