@@ -134,8 +134,11 @@ rag_agent
 FINISH
 """
 
+    # decision = router_llm.invoke([
+    #     SystemMessage(content=prompt)
+    # ])
     decision = router_llm.invoke([
-        SystemMessage(content=prompt)
+        HumanMessage(content=prompt)
     ])
 
     selected_agent = decision.next_agent
@@ -206,8 +209,12 @@ employee_agent, rag_agent, or FINISH.
 Do not select completed agents.
 """
 
+        # retry_decision = router_llm.invoke([
+        #     SystemMessage(content=retry_prompt)
+        # ])
+
         retry_decision = router_llm.invoke([
-            SystemMessage(content=retry_prompt)
+            HumanMessage(content=retry_prompt)
         ])
 
         selected_agent = retry_decision.next_agent
