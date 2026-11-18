@@ -11,6 +11,11 @@ PDF_FOLDER = Path("rag/docs")
 def load_pdfs():
     documents = []
 
+    print("DEBUG Current working directory:", Path.cwd())
+    print("DEBUG PDF folder:", PDF_FOLDER.resolve())
+    print("DEBUG PDF folder exists:", PDF_FOLDER.exists())
+    print("DEBUG PDF files:", list(PDF_FOLDER.glob("*.pdf")))
+
     for pdf_path in PDF_FOLDER.glob("*.pdf"):
 
         reader = PdfReader(pdf_path)
