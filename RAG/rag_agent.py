@@ -149,7 +149,22 @@ async def generate_answer(question, context):
     """
 
     response = await llm.ainvoke(prompt)
-    answer = response.content.strip()
+    # answer = response.content.strip()
+
+    content = response.content
+
+    if isinstance(content, str):
+        answer = content.strip()
+    elif isinstance(content, list):
+        answer = "\n".join(
+            block["text"]
+            for block in content
+            if isinstance(block, dict) and block.get("type") == "text"
+        ).strip()
+    else:
+        raise TypeError(
+            f"Unsupported response content type: {type(content)}"
+        )
 
     # Remove analysis before the final answer, if present.
     if "</think>" in answer:
