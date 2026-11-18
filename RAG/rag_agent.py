@@ -283,7 +283,35 @@ async def generate_and_review(question, context):
             """
 
             response = await llm.ainvoke(correction_prompt)
-            answer = response.content.strip()
+            # answer = response.content.strip()
+
+            content = response.content
+
+            if isinstance(content, str):
+                answer = content.strip()
+
+            elif isinstance(content, list):
+                text_parts = []
+
+                for block in content:
+                    if isinstance(block, str):
+                        text_parts.append(block)
+
+                    elif isinstance(block, dict):
+                        if block.get("type") == "text":
+                            text_parts.append(block.get("text", ""))
+
+                    else:
+                        text_value = getattr(block, "text", None)
+                        if isinstance(text_value, str):
+                            text_parts.append(text_value)
+
+                answer = "\n".join(text_parts).strip()
+
+            else:
+                raise TypeError(
+                    f"Unsupported response content type: {type(content)}"
+                )
 
             if "</think>" in answer:
                 answer = answer.rsplit("</think>", 1)[-1].strip()
